@@ -13,6 +13,7 @@
 #define Log libc::printf
 #define ErrorLog( str ) libc::printf("error:%s, file:%s, line:%d", str, __FILE__, __LINE__ );
 
+#define SLEEP(interval) libc::sleep(interval)
 //#define _NDEBUG
 
 // ASSERT

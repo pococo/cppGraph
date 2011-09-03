@@ -10,6 +10,7 @@
 #define __END_EASYGRAPH__ }
 #define __USING_NAMESPACE_THIS__ using namespace EasyGraph;
 
+
 class Object{
 public:
 };

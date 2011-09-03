@@ -68,9 +68,8 @@ void Test::testListIterator()
     
     {   // check reference oprator
         List<int>::Node node;
-        node.data = 10;
         List<int>::iterator testee(&node);
-        ASSERT ( *testee == 10 );               }
+        ASSERT ( *testee == &node );               }
     
     {   // check equal to
         List<int>::Node node1;

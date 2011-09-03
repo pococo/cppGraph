@@ -73,9 +73,9 @@ public:
     reference at( size_type index );
 
     /**
-     * return the "i"th element
+     * return the "index"th element
      */
-	reference operator[](unsigned int i);
+	reference operator[](unsigned int index);
     
     /**
      * return an iterator to begining element
@@ -108,9 +108,9 @@ public:
     size_type size() const;
     
     /**
-     * insert a node with "value" at the next of position "pos"
+     * insert a node with "data" at the next of position "pos"
      */
-    void insert(iterator pos, const data_type& value);
+    void insert(iterator pos, const data_type& data);
     
     /**
      * erase a node at position "pos"
@@ -121,15 +121,23 @@ public:
 private:
     
     /**
-     * insert node
+     * create a new node at the next position of a target node
      */
     node_type* create_next( node_type* target_node, const data_type& data );
+
+    /**
+     * create a new node at the previous position of a target node
+     */
     node_type* create_prev( node_type* target_node, const data_type& data );
+    
+    /**
+     * erase the target node
+     */
     node_type* erase( node_type* target_node );
 
     
-    size_type size_; //<! list size ( the number of nodes )
-    Node*     root_; //<! a root node for dummy
+    size_type size_; //<! list size ( the number of total nodes )
+    Node*     root_; //<! a root node ( always exists as dummy )
     
 public:
     
@@ -211,12 +219,16 @@ public:
         bool operator!= (const iterator& itr) const
         { return ptr_ != itr.ptr_; }
         
+        // todo if necessary
+        // >, < , >=, <=
+        // compare iterator to node_type* directly..
+        
         friend struct Test;
     };
     friend struct Test;
 };
 
-
+// constructor
 TEMPLATE_T
 List<T>::List(){
 	root_ = new List<T>::Node();
@@ -228,12 +240,13 @@ List<T>::List(){
 TEMPLATE_T
 List<T>::~List(){
 	clear();
-    if(root_){
+    if( root_ ){
         delete root_;
         root_ = 0;
     }
 }
 
+// delete all elements
 TEMPLATE_T void List<T>::clear(){
 	iterator itr_current = iterator( root_ -> next );
     iterator itr_end = iterator( root_ );
@@ -245,6 +258,7 @@ TEMPLATE_T void List<T>::clear(){
 	size_ = 0;
 }
 
+// create a new node at the next position of a target node
 TEMPLATE_T typename List<T>::node_type* List<T>::create_next( node_type* target_node, const data_type& data )
 {
 	if( target_node == 0 ) return 0;
@@ -259,7 +273,7 @@ TEMPLATE_T typename List<T>::node_type* List<T>::create_next( node_type* target_
     return new_node;
 }
 
-
+// create a new node at the previous position of a target node
 TEMPLATE_T typename List<T>::node_type* List<T>::create_prev(node_type* target_node,const data_type& data )
 {
 	if( target_node == 0 ) return 0;
@@ -275,6 +289,7 @@ TEMPLATE_T typename List<T>::node_type* List<T>::create_prev(node_type* target_n
     return new_node;
 }
 
+// erase the target node
 TEMPLATE_T typename List<T>::node_type* List<T>::erase( node_type* target_node )
 {
 	if( target_node == root_ || target_node == 0 ) return 0;
@@ -286,21 +301,25 @@ TEMPLATE_T typename List<T>::node_type* List<T>::erase( node_type* target_node )
     return next_node;
 }
 
+// return iterator to beginning node
 TEMPLATE_T typename List<T>::iterator List<T>::begin() const
 {
     return iterator( root_ -> next );
 }
 
+// return iterator to end node( = root )
 TEMPLATE_T typename List<T>::iterator List<T>::end() const
 {
     return iterator( root_ );
 }
 
+// push back data
 TEMPLATE_T void List<T>::push_back(const data_type& data)
 {
 	create_prev( root_, data );
 }
 
+// pop back data
 TEMPLATE_T void List<T>::pop_back()
 {
     erase( root_ -> prev );
@@ -308,7 +327,7 @@ TEMPLATE_T void List<T>::pop_back()
 
 TEMPLATE_T void List<T>::insert(iterator pos, const data_type& data )
 {
-    create_next( *pos, data );
+    create_prev( *pos, data );
 }
 
 TEMPLATE_T typename List<T>::iterator List<T>::erase( iterator pos )
