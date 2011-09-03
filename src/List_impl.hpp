@@ -3,7 +3,7 @@
 
 #include "Config.h"
 #include "Debug.h"
-#include "type_traits.h"
+//#include "type_traits.h"
 
 __BEGIN_EASYGRAPH__
 
@@ -55,7 +55,7 @@ public:
     /**
      * add new node at the next of the last element (with input a value)
      */
-    void push_back(const data_type& data);
+    void push_back( const data_type& data );
     
     /**
      * delete last node
@@ -123,9 +123,10 @@ private:
     /**
      * insert node
      */
-    void insert_next(node_type* node, const data_type& data);
-    
-    // -->todo list
+    node_type* create_next( node_type* target_node, const data_type& data );
+    node_type* create_prev( node_type* target_node, const data_type& data );
+    node_type* erase( node_type* target_node );
+
     
     size_type size_; //<! list size ( the number of nodes )
     Node*     root_; //<! a root node for dummy
@@ -195,8 +196,8 @@ public:
         /**
          * reference operator
          */
-        T operator*() const
-        { return ptr_ -> data; }
+        node_type* operator*() const
+        { return ptr_; }
         
         /**
          * equality operator( equal to )
@@ -219,8 +220,7 @@ public:
 TEMPLATE_T
 List<T>::List(){
 	root_ = new List<T>::Node();
-	root_ -> next = root_;
-	root_ -> prev = root_;
+	root_ -> next = root_ -> prev = root_;
 	size_ = 0;
 }
 
@@ -234,12 +234,126 @@ List<T>::~List(){
     }
 }
 
-TEMPLATE_T void List<T>::clear()
+TEMPLATE_T void List<T>::clear(){
+	iterator itr_current = iterator( root_ -> next );
+    iterator itr_end = iterator( root_ );
+	while( itr_current != itr_end ){
+		erase( *itr_current++ );
+	}
+	root_ -> next = root_;
+	root_ -> prev = root_;
+	size_ = 0;
+}
+
+TEMPLATE_T typename List<T>::node_type* List<T>::create_next( node_type* target_node, const data_type& data )
 {
-    // todo
+	if( target_node == 0 ) return 0;
+	node_type* new_node = new node_type();
+	new_node -> prev = target_node;
+	new_node -> next = target_node -> next;
+	target_node -> next -> prev = new_node;
+	target_node -> next = new_node;
+
+    new_node -> data = data;
+    size_++;
+    return new_node;
 }
 
 
+TEMPLATE_T typename List<T>::node_type* List<T>::create_prev(node_type* target_node,const data_type& data )
+{
+	if( target_node == 0 ) return 0;
+    
+	node_type* new_node = new node_type();
+	new_node -> prev = target_node -> prev;
+	new_node -> next = target_node;
+	target_node -> prev -> next = new_node;
+	target_node -> prev = new_node;
+    
+	new_node -> data = data;
+    size_++;
+    return new_node;
+}
+
+TEMPLATE_T typename List<T>::node_type* List<T>::erase( node_type* target_node )
+{
+	if( target_node == root_ || target_node == 0 ) return 0;
+    node_type* next_node = target_node -> next;
+	target_node -> prev -> next = target_node -> next;
+	target_node -> next -> prev = target_node -> prev;
+	delete target_node;
+    size_--;
+    return next_node;
+}
+
+TEMPLATE_T typename List<T>::iterator List<T>::begin() const
+{
+    return iterator( root_ -> next );
+}
+
+TEMPLATE_T typename List<T>::iterator List<T>::end() const
+{
+    return iterator( root_ );
+}
+
+TEMPLATE_T void List<T>::push_back(const data_type& data)
+{
+	create_prev( root_, data );
+}
+
+TEMPLATE_T void List<T>::pop_back()
+{
+    erase( root_ -> prev );
+}
+
+TEMPLATE_T void List<T>::insert(iterator pos, const data_type& data )
+{
+    create_next( *pos, data );
+}
+
+TEMPLATE_T typename List<T>::iterator List<T>::erase( iterator pos )
+{
+    return iterator( erase( *pos ) );
+}
+
+TEMPLATE_T typename List<T>::data_type& List<T>::operator[]( size_type index )
+{
+	iterator itr_current( root_-> next );
+	iterator itr_end( root_ );
+	while( itr_current != itr_end ){
+		if( index == 0 ){
+			return ( *itr_current ) -> data;
+		}
+		itr_current++;
+        index--;
+	}
+	return root_->data;
+}
+
+TEMPLATE_T typename List<T>::data_type& List<T>::at( size_type index )
+{
+    return this->operator[]( index );
+}
+
+TEMPLATE_T bool List<T>::empty() const
+{
+    return ( size_ == 0 );
+}
+
+TEMPLATE_T typename List<T>::reference List<T>::front() const
+{
+    return root_ -> next -> data;
+}
+
+TEMPLATE_T typename List<T>::reference List<T>::back() const
+{
+    return root_ -> prev -> data;
+}
+
+TEMPLATE_T typename List<T>::size_type List<T>::size() const
+{
+    return size_;
+}
 
 __END_EASYGRAPH__
 
