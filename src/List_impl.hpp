@@ -35,6 +35,9 @@ public:
         data_type data;
         Node():prev(0),next(0){}
     };
+    
+    typedef typename List<T>::Node node_type;
+    
     // forwaed decralation
     class iterator;
 
@@ -48,6 +51,7 @@ public:
      */
 	~List();
     
+    // todo list-->
     /**
      * add new node at the next of the last element (with input a value)
      */
@@ -112,19 +116,22 @@ public:
      * erase a node at position "pos"
      */
     iterator erase( iterator pos );
+    
+    
 private:
     
     /**
      * insert node
      */
-    void insert_next(Node* node, const data_type& data);
+    void insert_next(node_type* node, const data_type& data);
     
+    // -->todo list
     
     size_type size_; //<! list size ( the number of nodes )
     Node*     root_; //<! a root node for dummy
     
 public:
-    typedef typename List<T>::Node node_type;
+    
     /**
      * iterator class with a pointer to linked list nodes
      * @note [todo] for const pointers and references
@@ -160,7 +167,7 @@ public:
         /**
          * pre increment oprator
          */
-        iterator& operator++(int dummyForPreOperator){
+        iterator& operator++( int dummy ){
             ptr_ = ptr_ -> next; return *this;
         }
         
@@ -181,7 +188,7 @@ public:
         /** 
          * pre decrement oprator
          */
-        iterator& operator--(int dummyForPreOperator){
+        iterator& operator--( int dummy ){
             ptr_ = ptr_ -> prev; return *this;
         }
         
@@ -229,14 +236,10 @@ List<T>::~List(){
 
 TEMPLATE_T void List<T>::clear()
 {
-    //iterator itr = begin();
-    if( is_pointer<T>::ret ){
-        Log("pointer type");
-        // delete 
-    }
+    // todo
 }
-// define null pointer
-//TEMPLATE_T const typename List<T>::node_type* List<T>::null = 0;
+
+
 
 __END_EASYGRAPH__
 

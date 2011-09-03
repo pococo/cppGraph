@@ -10,6 +10,7 @@ __BEGIN_EASYGRAPH__
 template <class T>
 class List: public boost::ptr_vector<T>, public Object
 {
+    // todo
 };
 
 

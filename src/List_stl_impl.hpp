@@ -10,6 +10,7 @@ __BEGIN_EASYGRAPH__
 template <class T>
 class List: public std::vector<T>, public Object
 {
+    // todo
 };
 
 __END_EASYGRAPH__

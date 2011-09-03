@@ -6,10 +6,12 @@ __USING_NAMESPACE_THIS__
 
 void Test::testListIterator()
 {
-    Log( "class implemented by %s\n", implementation_type::name );
+    Log( "class implemented by %s\n", IMPL_LIBRARY );
     
 #if !USING_BOOST && !USING_STL
-    {
+    Log("start test ListIterator\n");
+    
+    {   // check node
         List<int>::Node node;
         ASSERT( node.prev == 0 );
         ASSERT( node.next == 0 );
