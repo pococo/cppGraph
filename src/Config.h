@@ -30,6 +30,5 @@ private:
     T* ptr_;
 };
 
-#include "Vertex.h"
 
 #endif

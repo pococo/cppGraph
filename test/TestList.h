@@ -9,6 +9,10 @@ class Test {
 public:
     void testListIterator();
     void testList();
+    void testConnector();
+    void testVertex();
+    void testEdge();
+
 };
 __END_EASYGRAPH__
 

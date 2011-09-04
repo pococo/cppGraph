@@ -241,6 +241,13 @@ public:
      */    
     iterator end() const;
     
+    // original methods
+    
+    /**
+     * find node with indicated data
+     */
+    iterator find( const data_type& data );
+    
     friend class Test;
 };
 
@@ -388,6 +395,25 @@ TEMPLATE_TN typename ListTemplate< T, NodeType >::size_type ListTemplate< T, Nod
 {
     return size_;
 }
+
+
+//------------------------------------------------------------------------------//
+//  original methods
+//------------------------------------------------------------------------------//
+// find node with indicated data
+TEMPLATE_TN typename ListTemplate< T, NodeType >::iterator ListTemplate< T, NodeType >::find( const data_type& data )
+{
+    iterator current_itr = begin();
+    iterator end_itr = end();
+    while ( current_itr != end_itr ) {
+        if ( ( *current_itr++ ) -> data == data ) { // data found
+            return current_itr;
+        }
+    }
+}
+
+//------------------------------------------------------------------------------//
+
 
 template< class T >
 class List:public ListTemplate< T, Node<T> >{
