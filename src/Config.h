@@ -13,6 +13,23 @@
 
 class Object{
 public:
+    virtual ~Object(){}
 };
+
+template <class T>
+class tmp_auto_ptr:public Object{
+public:
+    tmp_auto_ptr(T* ptr):ptr_(ptr){}
+    ~tmp_auto_ptr(){
+        if (ptr_) {
+            delete ptr_;
+            ptr_ = 0;
+        }
+    }
+private:
+    T* ptr_;
+};
+
+#include "Vertex.h"
 
 #endif

@@ -1,10 +1,16 @@
 #ifndef TEST_LIST_H
 #define TEST_LIST_H
-#include "../src/Debug.h"
-struct Test {
-    static void testListIterator();
-    static void testList();
+#include "../src/Config.h"
+
+
+__BEGIN_EASYGRAPH__
+
+class Test {
+public:
+    void testListIterator();
+    void testList();
 };
+__END_EASYGRAPH__
 
 
 

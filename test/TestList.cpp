@@ -1,8 +1,10 @@
 #include "TestList.h"
 
 #include "../src/List.hpp"
-__USING_NAMESPACE_THIS__
 
+#include "Config.h"
+
+__BEGIN_EASYGRAPH__
 
 void Test::testList()
 {
@@ -12,7 +14,7 @@ void Test::testList()
     Log("start test List\n");
     typedef int data_type;
     typedef List<data_type> list_t;
-    typedef list_t::node_type node_t;
+    typedef List<data_type>::Node node_t;
     
     {   // check root
         typedef int* data_type;
@@ -172,9 +174,16 @@ void Test::testList()
         ASSERT ( testee.at(0) == new_node0->data );
         ASSERT ( testee.at(1) == new_node1->data );
     }
+    {  // check ptr_list
+        ptr_list<int> *mylist = new ptr_list<int>;
+        int* pData = new int(100);
+        mylist->push_back( pData );
+        delete mylist;
+    }
 #endif
     
     
     Log("test ok.\n");
 }
 
+__END_EASYGRAPH__
