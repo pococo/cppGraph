@@ -1,2 +1,7 @@
-
-
+// todo list
+create list class[←]
+vertex class
+connector class
+edge class
+graph class
+graph viewer
